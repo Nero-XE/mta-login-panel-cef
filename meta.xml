@@ -1,0 +1,33 @@
+<meta>
+    <info 
+        author='Nero'
+        version='1.0.0'
+        name='CEF Login panel'
+        description='CEF панель авторизации с сохранением данных для входа, двух-факторной аутентификацией и ограничением создания нескольких аккаунтов с одного устройства.'
+        type='script'
+    />
+
+    <script src='client/*.lua' type='client'/>
+
+    <script src='server/server.lua' type='server'/>
+    <script src='server/events.lua' type='server'/>
+
+    <file src='html/assets/*.css'/>
+    <file src='html/assets/*.js'/>
+    <file src='html/favicon.ico'/>
+    <file src='html/index.html'/>
+
+    <settings>
+        <setting name='@SignUpAttemptsLimit' value='5' desc="Лимит попыток регистрации"/>
+        <setting name='@SignInAttemptsLimit' value='5' desc="Лимит попыток авторизации"/>
+        <setting name='@Check2FAAttemptsLimit' value='5' desc="Лимит попыток проверки кодового слова" />
+    </settings>
+
+    <aclrequest>
+        <right name='function.kickPlayer' access='true'/>
+        <right name='function.addAccount' access='true'/>
+        <right name='function.setAccountSerial' access='true'/>
+    </aclrequest>
+
+    <min_mta_version both='1.6.0-9.22430.0' />
+</meta>
