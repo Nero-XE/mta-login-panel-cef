@@ -1,5 +1,8 @@
----Модуль клиентской логики аутентификации
-Client = {}
+---@class Client Модуль клиентской логики аутентификации
+---@field private webBrowser WebBrowser 
+Client = {
+    webBrowser = WebBrowser.new('http://mta/local/html/index.html')
+}
 
 ---Ограничение пользователя при подключении
 local function restrictPlayerUntilAuth()
@@ -18,7 +21,8 @@ end
 
 ---Хендлер на старт ресурса
 function Client.resourceStartHandler()
-    WebBrowser:initRendering()
+    Client.webBrowser:init()
+    Client.webBrowser:focus()
     restrictPlayerUntilAuth()
     decryptAuthData()
 end
@@ -31,12 +35,12 @@ function Client.onDecryptAuthDataSuccessHandler(decryptedData)
     if not authData then return end
     local jsCode = string.format('setFormValues("%s", "%s", true)', authData.login, authData.password)
 
-    local browser = WebBrowser:getBrowser()
+    local browser = Client.webBrowser:get()
 
     if not browser then return end
     -- Ожидаем загрузки страницы, иначе функция подстановки значений не успеет инициализироваться
     addEventHandler('onClientBrowserDocumentReady', browser, function()
-        WebBrowser:executeJavaScript(jsCode)
+        Client.webBrowser:executeJavaScript(jsCode)
     end)
 end
 
@@ -52,7 +56,7 @@ end
 
 ---Хендлер на успешную регистрацию игрока
 function Client.onSignUpSuccessHandler()
-    WebBrowser:executeJavaScript('goToSignInPage()')
+    Client.webBrowser:executeJavaScript('goToSignInPage()')
 end
 
 ---Хранит данные аутентификации для сохранения
@@ -89,14 +93,18 @@ local function destroyEventHandlers()
         ['onSignInSuccess'] = Client.onSignInSuccessHandler,
         ['onSignInNeed2FA'] = Client.onSignInNeed2FAHandler,
         ['requestCheck2FA'] = Client.requestCheck2FAHandler,
-        -- ['onEncryptAuthDataSuccess'] = Client.onEncryptAuthDataSuccessHandler,
         ['onDecryptAuthDataSuccess'] = Client.onDecryptAuthDataSuccessHandler,
-        ['onSendNotifyToClient'] = Client.onSendNotifyToClientHandler,
     }
 
     for eventName, handlerFunc in pairs(handlers) do
         removeEventHandler(tostring(eventName), resourceRoot, handlerFunc)
     end
+
+    ---Удаляем позже, т.к. ивенты используются после входа
+    setTimer(function ()
+        removeEventHandler('onEncryptAuthDataSuccess', resourceRoot, Client.onEncryptAuthDataSuccessHandler)
+        removeEventHandler('onSendNotifyToClient', resourceRoot, Client.onSendNotifyToClientHandler)
+    end, 5000, 1)
 end
 
 ---Снимает ограничения с игрока после успешной авторизации
@@ -107,9 +115,14 @@ local function releasePlayerAfterAuth()
     setCameraTarget(localPlayer)
     setPlayerHudComponentVisible('all', true)
     guiSetInputMode('allow_binds')
-    WebBrowser:destroyBrowser()
+    Client.webBrowser:blur()
+    Client.webBrowser:executeJavaScript('hideForm()')
     showChat(true, false)
     showCursor(false)
+
+    setTimer(function ()
+        Client.webBrowser:destroy()
+    end, 5000, 1)
 end
 
 ---Хендлер на успешную шифровку данных аутентификации
@@ -131,7 +144,7 @@ end
 
 ---Хендлер на запрос кодового слова
 function Client.onSignInNeed2FAHandler()
-    WebBrowser:executeJavaScript('goToVerificationPage()')
+    Client.webBrowser:executeJavaScript('goToVerificationPage()')
 end
 
 ---Обрабатывает запрос на проверку кодового слова
@@ -158,5 +171,5 @@ function Client.onSendNotifyToClientHandler(type, message, description)
         jsCode = string.format('show%s("%s")', messageType[type], message)
     end
 
-    WebBrowser:executeJavaScript(jsCode)
+    Client.webBrowser:executeJavaScript(jsCode)
 end

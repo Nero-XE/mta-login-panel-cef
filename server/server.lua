@@ -70,7 +70,7 @@ function Server.onRequestSignUpHandler(login, password, secretCode)
             setAccountData(accountAdded, 'loginPanel.secretCode', secretCode)
             setAccountSerial(accountAdded, playerSerial)
             triggerClientEvent(client, 'onSignUpSuccess', resourceRoot)
-            triggerClientEvent(client, 'onSendNotifyToClient', resourceRoot, 'success', 'Вы успешно зарегистрировались, войдите в аккаунт!')
+            triggerClientEvent(client, 'onSendNotifyToClient', resourceRoot, 'info', 'Вы успешно зарегистрировались!', 'Можете войти в аккаунт')
         else
             local attemptMessage = handleAttempt(client, 'signUp')
             triggerClientEvent(client, 'onSendNotifyToClient', resourceRoot, 'warning', 'Введенный логин уже занят!', attemptMessage)
@@ -88,7 +88,7 @@ end
 local function completePlayerSignIn(player, account, password)
     logIn(player, account, password)
     triggerClientEvent(player, 'onSignInSuccess', resourceRoot)
-    outputChatBox('Вы успешно авторизовались!', player, 80, 200, 120)
+    triggerClientEvent(player, 'onSendNotifyToClient', resourceRoot, 'success', 'Вы успешно авторизовались!')
 end
 
 ---Переменная хранящая данные авторизации. Потребуется при входе с нового компьютера
