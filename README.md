@@ -10,6 +10,8 @@
 
 ![sign-up-screenshot](./screenshots/sign-up-form.png)
 
+![notify](./screenshots/notify.png)
+
 ## Возможности
 
 ### Безопасность
@@ -34,19 +36,19 @@
 ## Установка
 
 1. **Установка в MTA:**
-   - Скопировать папку ресурса в `server/mods/deathmatch/resources/`
-   - Добавить в `mtaserver.conf`:
+   - Скопировать папку ресурса в`server/mods/deathmatch/resources/`
+   - Добавить в`mtaserver.conf`:
      ```xml
      <resource src="login-panel-cef" startup="1" />
      ```
-   - Выдать права: `/aclrequest list login-panel-cef allow`.
+   - Выдать права:`/aclrequest list login-panel-cef allow`.
 2. **Сборка интерфейса**
    ```bash
    npm install
    npm run build
    ```
 3. **Настройка**
-   - Настроить лимиты можно в файле ресурса `meta.xml`
+   - Настроить лимиты можно в файле ресурса`meta.xml`
      ```xml
      <settings>
          <setting name='@SignUpAttemptsLimit' value='5' desc="Лимит попыток регистрации"/>
