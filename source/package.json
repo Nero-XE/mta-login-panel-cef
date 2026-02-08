@@ -1,6 +1,6 @@
 {
-  "name": "mta-login-panel-web-ui",
-  "version": "1.1.0",
+  "name": "mta-login-panel-ui",
+  "version": "1.1.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -11,7 +11,6 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
     "lint": "run-s lint:*",
-    "lint:oxlint": "oxlint . --fix",
     "lint:eslint": "eslint . --fix --cache",
     "format": "prettier --write --experimental-cli src/"
   },
@@ -42,12 +41,10 @@
     "@vue/tsconfig": "^0.8.1",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-oxlint": "~1.42.0",
     "eslint-plugin-vue": "~10.7.0",
     "jiti": "^2.6.1",
     "jsdom": "^27.4.0",
     "npm-run-all2": "^8.0.4",
-    "oxlint": "~1.42.0",
     "prettier": "3.8.1",
     "tw-animate-css": "^1.4.0",
     "typescript": "~5.9.3",

@@ -1,11 +1,11 @@
 ---Модуль логики работы с файлом аутентификации
-AuthData = {
+AuthDataManager = {
     filePath = 'cache/authData.enc'
 }
 
 ---Возвращает содержимое файла аутентификации
 ---@return string|false
-function AuthData:getFileContent()
+function AuthDataManager:getFileContent()
     FileManager:setFilePath(self.filePath)
     return FileManager:getFileContent()
 end
@@ -13,7 +13,7 @@ end
 ---Управляет содержимым файла с данными аутентификации
 ---@param authData string
 ---@return boolean|nil
-function AuthData:syncDataToFile(authData)
+function AuthDataManager:syncDataToFile(authData)
     FileManager:setFilePath(self.filePath)
     local isAuthDataFileExists = FileManager:isFileExists()
 
@@ -26,7 +26,7 @@ function AuthData:syncDataToFile(authData)
 end
 
 ---Удаляет файл с данными аутентификации
-function AuthData:deleteDataFile()
+function AuthDataManager:deleteDataFile()
     FileManager:setFilePath(self.filePath)
     FileManager:deleteFile()
 end

@@ -8,7 +8,7 @@ import * as zod from 'zod'
 import { ACheckbox, AInputField } from '@/components/composed'
 import BaseForm from '@/components/BaseForm.vue'
 import { onMounted } from 'vue'
-import { setupFormApi } from '@/api/formDataService'
+import { registerSetValues } from '@/api/form'
 
 const formSchema = toTypedSchema(
   zod.object({
@@ -27,9 +27,7 @@ const { handleSubmit, setValues } = useForm({
   },
 })
 
-onMounted(() => {
-  setupFormApi(setValues)
-})
+onMounted(() => { registerSetValues(setValues) })
 
 const onSubmit = handleSubmit((data) => {
   mta.triggerEvent('requestSignIn', JSON.stringify(data))

@@ -1,27 +1,27 @@
 import router from '@/router'
 
+export function createRouterApi() {
+    function navigateToSignInPage(): void {
+        router.push('/sign-in');
+    };
+
+    function navigateToSignUpPage(): void {
+        router.push('/sign-up');
+    };
+
+    function navigateToVerificationPage(): void {
+        router.push('/verification');
+    };
+
+    return {
+        navigateToSignInPage,
+        navigateToSignUpPage,
+        navigateToVerificationPage,
+    };
+};
+
 declare global {
-  interface Window {
-    goToSignInPage: () => void
-    goToSignUpPage: () => void
-    goToVerificationPage: () => void
-  }
-}
-
-const routerApi = {
-  signInPage: (): void => {
-    router.push('/')
-  },
-  signUpPage: (): void => {
-    router.push('/sign-up')
-  },
-  verificationPage: (): void => {
-    router.push('/verification')
-  },
-}
-
-export function setupRouterApi() {
-  window.goToSignInPage = routerApi.signInPage
-  window.goToSignUpPage = routerApi.signUpPage
-  window.goToVerificationPage = routerApi.verificationPage
-}
+    interface Window {
+        routerApi: ReturnType<typeof createRouterApi>;
+    }
+};

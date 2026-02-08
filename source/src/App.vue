@@ -3,18 +3,14 @@ import { useColorMode } from '@vueuse/core'
 import { RouterView } from 'vue-router'
 import { Toaster } from '@/components/ui/sonner'
 import 'vue-sonner/style.css'
-import { onMounted } from 'vue'
-import { formState, setupHideFormApi } from './api/hideForm'
+import { isFormVisible } from './api/form'
 
 const mode = useColorMode()
 mode.value = 'dark'
 
-onMounted(() => {
-    setupHideFormApi()
-});
 </script>
 
 <template>
-  <RouterView v-if="formState" />
+  <RouterView v-if="isFormVisible" />
   <Toaster position="top-center" theme="dark" rich-colors />
 </template>

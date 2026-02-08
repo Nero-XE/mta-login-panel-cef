@@ -6,10 +6,10 @@ import VerificationView from '@/views/VerificationView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: '/', component: SignInView },
+    { path: '/sign-in', component: SignInView },
     { path: '/sign-up', component: SignUpView },
     { path: '/verification', component: VerificationView },
-    { path: '/:pathMatch(.*)*', redirect: '/' },
+    { path: '/:pathMatch(.*)*', redirect: '/sign-in' },
   ],
 })
 
