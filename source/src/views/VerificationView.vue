@@ -49,7 +49,7 @@ const onSubmit = handleSubmit((data) => {
             type="reset"
             form="verification-form"
             variant="secondary"
-            @click="() => router.push('/')"
+            @click="() => router.push('/sign-in')"
           >Отмена</Button>
         </Field>
         <Field>

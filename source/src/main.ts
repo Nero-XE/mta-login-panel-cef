@@ -2,13 +2,15 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import './styles/global.css'
-import { setupToastApi } from './api/toast'
-import { setupRouterApi } from './api/router'
+import { createToastApi } from './api/toast'
+import { createRouterApi } from './api/router'
+import { createFormApi } from './api/form'
 
 const app = createApp(App)
 
-setupToastApi()
-setupRouterApi()
+window.toastApi = createToastApi()
+window.routerApi = createRouterApi()
+window.formApi = createFormApi()
 
 app.use(router)
 app.mount('#app')

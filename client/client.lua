@@ -7,13 +7,12 @@ Client = {
 ---Ограничение пользователя при подключении
 local function restrictPlayerUntilAuth()
     setPlayerHudComponentVisible('all', false)
-    guiSetInputMode('no_binds')
     showChat(false)
 end
 
 ---Запрос на дешифровку данных аутентификации (если файл с данными существует у клиента)
 local function decryptAuthData()
-    local fileContent = AuthData:getFileContent()
+    local fileContent = AuthDataManager:getFileContent()
 
     if not fileContent then return end
     triggerServerEvent('onRequestDecryptAuthData', resourceRoot, fileContent)
@@ -33,7 +32,7 @@ function Client.onDecryptAuthDataSuccessHandler(decryptedData)
     local authData = fromJSON(decryptedData)
 
     if not authData then return end
-    local jsCode = string.format('setFormValues("%s", "%s", true)', authData.login, authData.password)
+    local jsCode = string.format('formApi.setSignInFormValues("%s", "%s")', authData.login, authData.password)
 
     local browser = Client.webBrowser:get()
 
@@ -56,7 +55,7 @@ end
 
 ---Хендлер на успешную регистрацию игрока
 function Client.onSignUpSuccessHandler()
-    Client.webBrowser:executeJavaScript('goToSignInPage()')
+    Client.webBrowser:executeJavaScript('routerApi.navigateToSignInPage()')
 end
 
 ---Хранит данные аутентификации для сохранения
@@ -114,9 +113,8 @@ local function releasePlayerAfterAuth()
     setElementDimension(localPlayer, 0)
     setCameraTarget(localPlayer)
     setPlayerHudComponentVisible('all', true)
-    guiSetInputMode('allow_binds')
     Client.webBrowser:blur()
-    Client.webBrowser:executeJavaScript('hideForm()')
+    Client.webBrowser:executeJavaScript('formApi.hideForm()')
     showChat(true, false)
     showCursor(false)
 
@@ -128,7 +126,7 @@ end
 ---Хендлер на успешную шифровку данных аутентификации
 ---@param encryptedData string
 function Client.onEncryptAuthDataSuccessHandler(encryptedData)
-    AuthData:syncDataToFile(encryptedData)
+    AuthDataManager:syncDataToFile(encryptedData)
 end
 
 ---Хендлер на успешную авторизацию игрока
@@ -138,13 +136,13 @@ function Client.onSignInSuccessHandler()
     if preparedAuthData then
         triggerServerEvent('onRequestEncryptAuthData', resourceRoot, preparedAuthData)
     else
-        AuthData:deleteDataFile()
+        AuthDataManager:deleteDataFile()
     end
 end
 
 ---Хендлер на запрос кодового слова
 function Client.onSignInNeed2FAHandler()
-    Client.webBrowser:executeJavaScript('goToVerificationPage()')
+    Client.webBrowser:executeJavaScript('routerApi.navigateToVerificationPage()')
 end
 
 ---Обрабатывает запрос на проверку кодового слова
@@ -153,22 +151,23 @@ function Client.requestCheck2FAHandler(secretCode)
 end
 
 ---Хендлер на уведомления
----@param type 'error'|'success'|'warning' Тип уведомления
+---@param type 'success'|'info'|'warning'|'error' Тип уведомления
 ---@param message string Сообщение
 ---@param description string|nil Описание
 function Client.onSendNotifyToClientHandler(type, message, description)
     local messageType = {
-        ['error'] = 'Error',
         ['success'] = 'Success',
+        ['info'] = 'Info',
         ['warning'] = 'Warning',
+        ['error'] = 'Error',
     }
 
     local jsCode = nil
 
     if description then
-        jsCode = string.format('show%s("%s", "%s")', messageType[type], message, description)
+        jsCode = string.format('toastApi.show%sToast("%s", "%s")', messageType[type], message, description)
     else
-        jsCode = string.format('show%s("%s")', messageType[type], message)
+        jsCode = string.format('toastApi.show%sToast("%s")', messageType[type], message)
     end
 
     Client.webBrowser:executeJavaScript(jsCode)
