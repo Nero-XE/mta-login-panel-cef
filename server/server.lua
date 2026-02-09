@@ -18,7 +18,7 @@ end
 ---Обрабатывает попытку операции с проверкой лимита
 ---@param player element Игрок
 ---@param attemptType 'signUp'|'signIn'|'check2FA' Тип операции
----@return string
+---@return string|nil
 local function handleAttempt(player, attemptType)
     local configs = {
         signUp = {
@@ -73,11 +73,11 @@ function Server.onRequestSignUpHandler(login, password, secretCode)
             triggerClientEvent(client, 'onSendNotifyToClient', resourceRoot, 'info', 'Вы успешно зарегистрировались!', 'Можете войти в аккаунт')
         else
             local attemptMessage = handleAttempt(client, 'signUp')
-            triggerClientEvent(client, 'onSendNotifyToClient', resourceRoot, 'warning', 'Введенный логин уже занят!', attemptMessage)
+            triggerClientEvent(client, 'onSignUpFailure', resourceRoot, 'warning', 'Введенный логин уже занят!', attemptMessage)
         end
     else
         local attemptMessage = handleAttempt(client, 'signUp')
-        triggerClientEvent(client, 'onSendNotifyToClient', resourceRoot, 'error', 'На этом устройстве уже зарегистрирован аккаунт!', attemptMessage)
+        triggerClientEvent(client, 'onSignUpFailure', resourceRoot, 'error', 'На этом устройстве уже зарегистрирован аккаунт!', attemptMessage)
     end
 end
 
@@ -112,7 +112,7 @@ function Server.onRequestSignInHandler(login, password)
         end
     else
         local attemptMessage = handleAttempt(client, 'signIn');
-        triggerClientEvent(client, 'onSendNotifyToClient', resourceRoot, 'error', 'Неверный логин или пароль!', attemptMessage)
+        triggerClientEvent(client, 'onSignInFailure', resourceRoot, attemptMessage)
     end
 end
 
@@ -126,7 +126,8 @@ function Server.onRequestCheck2FAHandler(secretCode)
         completePlayerSignIn(client, account, password)
     else
         local attemptMessage = handleAttempt(client, 'check2FA');
-        triggerClientEvent(client, 'onSendNotifyToClient', resourceRoot, 'error', 'Неверное кодовое слово!', attemptMessage)
+        triggerClientEvent(client, 'onCheck2FAFailure', resourceRoot, attemptMessage)
+        -- triggerClientEvent(client, 'onCheck2FAFailure', resourceRoot, 'error', 'Неверное кодовое слово!', attemptMessage)
     end
 end
 
@@ -175,7 +176,6 @@ function Server.onRequestEncryptAuthDataHandler(data)
         coroutine.resume(co, result)
     end)
 end
-
 
 ---Дешифровка данных аутентификации
 ---@param data string Данные, которые необходимо расшифровать

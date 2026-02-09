@@ -7,6 +7,7 @@ type SignInFormValues = {
 }
 
 const isFormVisible = ref<boolean>(true);
+const isFormLoading = ref<boolean>(false);
 let setValuesFunction: ((fields: SignInFormValues) => void) | null = null;
 
 export function registerSetValues(fn: (fields: SignInFormValues) => void): void {
@@ -22,17 +23,22 @@ export function createFormApi() {
         });
     };
 
+    function setLoading(state: boolean): void {
+        isFormLoading.value = state;
+    }
+
     function hideForm(): void {
         isFormVisible.value = false;
     };
 
     return {
         setSignInFormValues,
+        setLoading,
         hideForm,
     };
 };
 
-export { isFormVisible }
+export { isFormVisible, isFormLoading }
 
 declare global {
     interface Window {
