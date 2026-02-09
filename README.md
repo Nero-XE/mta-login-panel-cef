@@ -10,6 +10,8 @@
 
 ![sign-up-screenshot](./screenshots/sign-up-form.png)
 
+![sign-in-loading-screenshot](./screenshots/sign-in-loading.png)
+
 ![notify](./screenshots/notify.png)
 
 ## Возможности
@@ -39,9 +41,9 @@
    - Скопировать папку ресурса в`server/mods/deathmatch/resources/`
    - Добавить в`mtaserver.conf`:
      ```xml
-     <resource src="login-panel-cef" startup="1" />
+     <resource src="login_panel" startup="1" />
      ```
-   - Выдать права:`/aclrequest list login-panel-cef allow`.
+   - Выдать права:`/aclrequest list login_panel allow`.
 2. **Сборка интерфейса**
    ```bash
    npm install
