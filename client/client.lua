@@ -45,6 +45,7 @@ end
 
 ---Обрабатывает запрос на регистрацию нового пользователя
 function Client.requestSignUpHandler(rawRegData)
+    Client.webBrowser:executeJavaScript('formApi.setLoading(true)')
     local authData = fromJSON(rawRegData)
 
     if not authData then return end
@@ -55,7 +56,21 @@ end
 
 ---Хендлер на успешную регистрацию игрока
 function Client.onSignUpSuccessHandler()
+    Client.webBrowser:executeJavaScript('formApi.setLoading(false)')
     Client.webBrowser:executeJavaScript('routerApi.navigateToSignInPage()')
+end
+
+---Хендлер на неудачную попытку регистрации
+function Client.onSignUpFailureHandler(type, message, description)
+    local messageType = {
+        ['success'] = 'Success',
+        ['info'] = 'Info',
+        ['warning'] = 'Warning',
+        ['error'] = 'Error',
+    }
+    local jsCode = string.format('toastApi.show%sToast("%s", "%s")', messageType[type], message, description)
+    Client.webBrowser:executeJavaScript(jsCode)
+    Client.webBrowser:executeJavaScript('formApi.setLoading(false)')
 end
 
 ---Хранит данные аутентификации для сохранения
@@ -71,6 +86,8 @@ end
 ---Обрабатывает запрос на авторизацию пользователя
 ---@param rawAuthData string
 function Client.requestSignInHandler(rawAuthData)
+    Client.webBrowser:executeJavaScript('formApi.setLoading(true)')
+
     local authData = fromJSON(rawAuthData)
 
     if not authData then return end
@@ -88,10 +105,13 @@ local function destroyEventHandlers()
         ['onClientResourceStart'] = Client.resourceStartHandler,
         ['requestSignUp'] = Client.requestSignUpHandler,
         ['onSignUpSuccess'] = Client.onSignUpSuccessHandler,
+        ['onSignUpFailure'] = Client.onSignUpFailureHandler,
         ['requestSignIn'] = Client.requestSignInHandler,
         ['onSignInSuccess'] = Client.onSignInSuccessHandler,
+        ['onSignInFailure'] = Client.onSignInFailureHandler,
         ['onSignInNeed2FA'] = Client.onSignInNeed2FAHandler,
         ['requestCheck2FA'] = Client.requestCheck2FAHandler,
+        ['onCheck2FAFailure'] = Client.onCheck2FAFailureHandler,
         ['onDecryptAuthDataSuccess'] = Client.onDecryptAuthDataSuccessHandler,
     }
 
@@ -140,14 +160,30 @@ function Client.onSignInSuccessHandler()
     end
 end
 
+---Хендлер на неудачную попытку авторизации
+function Client.onSignInFailureHandler(attemptMessage)
+    local jsCode = string.format('toastApi.showErrorToast("Неверный логин или пароль!", "%s")', attemptMessage)
+    Client.webBrowser:executeJavaScript(jsCode)
+    Client.webBrowser:executeJavaScript('formApi.setLoading(false)')
+end
+
 ---Хендлер на запрос кодового слова
 function Client.onSignInNeed2FAHandler()
+    Client.webBrowser:executeJavaScript('formApi.setLoading(false)')
     Client.webBrowser:executeJavaScript('routerApi.navigateToVerificationPage()')
 end
 
 ---Обрабатывает запрос на проверку кодового слова
 function Client.requestCheck2FAHandler(secretCode)
+    Client.webBrowser:executeJavaScript('formApi.setLoading(true)')
     triggerServerEvent('onRequestCheck2FA', resourceRoot, secretCode)
+end
+
+---Хендлер на неудачную попытку проверки кодового слова
+function Client.onCheck2FAFailureHandler(attemptMessage)
+    local jsCode = string.format('toastApi.showErrorToast("Неверное кодовое слово!", "%s")', attemptMessage)
+    Client.webBrowser:executeJavaScript(jsCode)
+    Client.webBrowser:executeJavaScript('formApi.setLoading(false)')
 end
 
 ---Хендлер на уведомления
