@@ -1,42 +1,53 @@
-addEventHandler('onClientResourceStart', resourceRoot, Client.resourceStartHandler, false)
+---Старт ресурса
+addEventHandler('onClientResourceStart', resourceRoot, Handlers.onResourceStart, false)
 
---Хендлеры регистрации
+
+
+---Регистраця
 addEvent('requestSignUp', true)
-addEventHandler('requestSignUp', resourceRoot, Client.requestSignUpHandler, true)
+addEventHandler('requestSignUp', resourceRoot, Handlers.onRequestSignUp, true)
 
 addEvent('onSignUpSuccess', true)
-addEventHandler('onSignUpSuccess', resourceRoot, Client.onSignUpSuccessHandler, false)
+addEventHandler('onSignUpSuccess', resourceRoot, Handlers.onSignUpSuccess, false)
 
 addEvent('onSignUpFailure', true)
-addEventHandler('onSignUpFailure', resourceRoot, Client.onSignUpFailureHandler, false)
+addEventHandler('onSignUpFailure', resourceRoot, Handlers.onSignUpFailure, false)
 
---Хендлеры авторизации
+
+
+---Авторизация
 addEvent('requestSignIn', true)
-addEventHandler('requestSignIn', resourceRoot, Client.requestSignInHandler, true)
+addEventHandler('requestSignIn', resourceRoot, Handlers.onRequestSignIn, true)
 
 addEvent('onSignInSuccess', true)
-addEventHandler('onSignInSuccess', resourceRoot, Client.onSignInSuccessHandler, false)
+addEventHandler('onSignInSuccess', resourceRoot, Handlers.onSignInSuccess, false)
 
 addEvent('onSignInFailure', true)
-addEventHandler('onSignInFailure', resourceRoot, Client.onSignInFailureHandler, false)
+addEventHandler('onSignInFailure', resourceRoot, Handlers.onSignInFailure, false)
 
---Хендлеры кодового слова
+
+
+---Кодовая фраза
 addEvent('onSignInNeed2FA', true)
-addEventHandler('onSignInNeed2FA', resourceRoot, Client.onSignInNeed2FAHandler, false)
+addEventHandler('onSignInNeed2FA', resourceRoot, Handlers.onSignInNeed2FA, false)
 
 addEvent('requestCheck2FA', true)
-addEventHandler('requestCheck2FA', resourceRoot, Client.requestCheck2FAHandler, true)
+addEventHandler('requestCheck2FA', resourceRoot, Handlers.onRequestCheck2FA, true)
 
 addEvent('onCheck2FAFailure', true)
-addEventHandler('onCheck2FAFailure', resourceRoot, Client.onCheck2FAFailureHandler, true)
+addEventHandler('onCheck2FAFailure', resourceRoot, Handlers.onCheck2FAFailure, true)
 
---Хендлеры на расшифровку файла с данными аутентификации
+
+
+---Расшифровка файлов с данными аутентификации
 addEvent('onEncryptAuthDataSuccess', true)
-addEventHandler('onEncryptAuthDataSuccess', resourceRoot, Client.onEncryptAuthDataSuccessHandler, false)
+addEventHandler('onEncryptAuthDataSuccess', resourceRoot, Handlers.onEncryptAuthDataSuccess, false)
 
 addEvent('onDecryptAuthDataSuccess', true)
-addEventHandler('onDecryptAuthDataSuccess', resourceRoot, Client.onDecryptAuthDataSuccessHandler, false)
+addEventHandler('onDecryptAuthDataSuccess', resourceRoot, Handlers.onDecryptAuthDataSuccess, false)
 
---Ивент уведомлений (используется для вызова сервером)
+
+
+---Вызов уведомлений (используется для вызова сервером)
 addEvent('onSendNotifyToClient', true)
-addEventHandler('onSendNotifyToClient', resourceRoot, Client.onSendNotifyToClientHandler, false)
+addEventHandler('onSendNotifyToClient', resourceRoot, Handlers.onSendNotifyToClient, false)

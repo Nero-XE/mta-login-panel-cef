@@ -1,16 +1,16 @@
 addEventHandler('onPlayerJoin', root, Server.restrictPlayerUntilAuth)
 
 addEvent('onRequestSignUp', true)
-addEventHandler('onRequestSignUp', resourceRoot, Server.onRequestSignUpHandler, false)
+addEventHandler('onRequestSignUp', resourceRoot, Handlers.onRequestSignUp, false)
 
 addEvent('onRequestSignIn', true)
-addEventHandler('onRequestSignIn', resourceRoot, Server.onRequestSignInHandler, false)
+addEventHandler('onRequestSignIn', resourceRoot, Handlers.onRequestSignIn, false)
 
 addEvent('onRequestCheck2FA', true)
-addEventHandler('onRequestCheck2FA', resourceRoot, Server.onRequestCheck2FAHandler, false)
+addEventHandler('onRequestCheck2FA', resourceRoot, Handlers.onRequestCheck2FA, false)
 
 addEvent('onRequestEncryptAuthData', true)
-addEventHandler('onRequestEncryptAuthData', resourceRoot, Server.onRequestEncryptAuthDataHandler, false)
+addEventHandler('onRequestEncryptAuthData', resourceRoot, Handlers.onRequestEncryptAuthData, false)
 
 addEvent('onRequestDecryptAuthData', true)
-addEventHandler('onRequestDecryptAuthData', resourceRoot, Server.onRequestDecryptAuthDataHandler, false)
+addEventHandler('onRequestDecryptAuthData', resourceRoot, Handlers.onRequestDecryptAuthData, false)
