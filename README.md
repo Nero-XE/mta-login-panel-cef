@@ -31,8 +31,9 @@
 
 ## Технологии
 
-- **Клиентский интерфейс:** Vue 3, Shadcn-vue, Vite.
-- **Серверная часть:** Lua (MTA).
+- **Пользовательский интерфейс:** Vue 3, Shadcn-vue, Vite.
+- **Клиентская логика:** Lua (MTA).
+- **Серверная логика:** Lua (MTA).
 - **Тестирование:** Vitest.
 
 ## Установка
@@ -41,9 +42,9 @@
    - Скопировать папку ресурса в`server/mods/deathmatch/resources/`
    - Добавить в`mtaserver.conf`:
      ```xml
-     <resource src="login_panel" startup="1" />
+     <resource src="login-panel" startup="1" />
      ```
-   - Выдать права:`/aclrequest list login_panel allow`.
+   - Выдать права:`/aclrequest list login-panel allow`.
 2. **Сборка интерфейса**
    ```bash
    npm install
@@ -61,4 +62,4 @@
 
 ## Требования
 
-**Минимальная версия клиента и сервера MTA:SA 1.6.0-9.22430.0**
+**Минимальная версия клиента и сервера MTA:SA 1.6.0-9.23289.0**
